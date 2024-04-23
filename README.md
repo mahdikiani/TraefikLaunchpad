@@ -1,5 +1,5 @@
 # Traefik Docker Compose Launchpad
-This repository contains a simple and reusable Docker Compose configuration for (Traefik)[https://traefik.io/], a modern HTTP reverse proxy and load balancer. It is designed to be included as a Git submodule in other projects to easily set up Traefik as a reverse proxy.
+This repository contains a simple and reusable Docker Compose configuration for [Traefik](https://traefik.io/), a modern HTTP reverse proxy and load balancer. It is designed to be included as a Git submodule in other projects to easily set up Traefik as a reverse proxy.
 
 ## Features
 
@@ -52,9 +52,9 @@ This module comes with a default configuration for Traefik, which you can modify
 
 ## License
 
-This project is open source and available under the (MIT License)[https://github.com/mahdikiani/TraefikLaunchpad/blob/main/LICENSE].
+This project is open source and available under the [MIT License](https://github.com/mahdikiani/TraefikLaunchpad/blob/main/LICENSE).
 
 ## Authors
-- (Mahdi Kiani)[https://github.com/mahdikiani]
+- [Mahdi Kiani](https://github.com/mahdikiani)
 
-For more information on Traefik, visit the (official Traefik documentation)[https://traefik.io/].
+For more information on Traefik, visit the [official Traefik documentation](https://traefik.io/).
