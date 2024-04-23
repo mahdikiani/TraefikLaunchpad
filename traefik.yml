@@ -1,0 +1,48 @@
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # - "--accesslog=true"
+      # - "--accesslog.filepath=/data/access.log"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web" 
+      - "--certificatesresolvers.letsencrypt.acme.email=${SSL_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/acme.json"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./acme.json:/acme.json
+      # - ./access.log:/data/access.log
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROJECT_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.middlewares.${PROJECT_NAME}-auth.basicauth.users=admin:$$apr1$$pyUb9xhb$$oIbil4NYx8G1CnViSrOHZ0"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      # - "traefik.http.routers.${PROJECT_NAME}.middlewares=https-redirect"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.entrypoints=websecure"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.middlewares=${PROJECT_NAME}-auth"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.tls=true"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.service=api@internal"
+
+networks:
+  traefik-net:
+    name: traefik-net
